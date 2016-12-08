@@ -1,4 +1,4 @@
-var myAPIKey = '1234567890';
+var myAPIKey = '9960a7c0fd3b87cf3e33b48d3a30e7d0';
 
 Pebble.on('message', function(event) {
   if(event.data.command === 'weather') {

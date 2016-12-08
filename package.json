@@ -1,27 +1,31 @@
 {
-  "name": "LecoWeather-Rocky",
-  "author": "MakeAwesomeHappen",
-  "version": "1.0.0",
-  "keywords": [
-    "pebble-app"
-  ],
-  "private": true,
-  "pebble": {
-    "displayName": "LecoWeather Rocky",
-    "uuid": "5f2713e1-bbf6-4a6b-93de-a9106940aaa9",
-    "sdkVersion": "3",
-    "projectType": "rocky",
-    "enableMultiJS": true,
-    "watchapp": {
-      "watchface": true
-    },
-    "targetPlatforms": [
-      "basalt",
-      "chalk",
-      "diorite"
+    "author": "malix",
+    "dependencies": {},
+    "keywords": [
+        "pebble-app"
     ],
-    "capabilities": [
-      "location"
-    ]
-  }
+    "name": "malixw",
+    "pebble": {
+        "capabilities": [
+            "location",
+            "configurable",
+            "health"
+        ],
+        "displayName": "malix weather",
+        "enableMultiJS": true,
+        "messageKeys": [],
+        "projectType": "rocky",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "basalt"
+        ],
+        "uuid": "7212eeaf-8fdc-4bf3-8ccb-53cc2ab27081",
+        "watchapp": {
+            "watchface": true
+        }
+    },
+    "version": "1.3.0"
 }

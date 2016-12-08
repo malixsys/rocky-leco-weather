@@ -4,6 +4,7 @@ var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
   'Oct', 'Nov', 'Dec'];
 var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var weather = null;
+var loading = false;
 
 rocky.on('draw', function(drawEvent) {
   var ctx = drawEvent.context;
@@ -24,14 +25,15 @@ rocky.on('draw', function(drawEvent) {
 
   // DATE
   ctx.fillStyle = 'lightgray';
-  var clockDate = dayNames[d.getDay()] + ' ' + d.getDate() + ' ' + 
-                    monthNames[d.getMonth()] + ', ' + d.getFullYear();
-  ctx.font = '18px bold Gothic';
+  var clockDate = d.getDate() + ' ' + 
+                    monthNames[d.getMonth()];
+  // dayNames[d.getDay()] + ' ' + 
+  ctx.font = '24px bold Gothic';
   ctx.textAlign = 'center';
-  ctx.fillText(clockDate, w / 2, 100 - obstruction_h);
+  ctx.fillText(clockDate, w / 2, 120 - obstruction_h);
 
   // COLON BLINK MASK
-  if (!(d.getSeconds() % 2)) {
+  if (loading) {
     ctx.fillStyle = 'black';
     ctx.fillRect(66, 72 - obstruction_h, 12, 26);
   }
@@ -39,26 +41,42 @@ rocky.on('draw', function(drawEvent) {
   // WEATHER
   if (weather) {
     ctx.fillStyle = 'white';
-    var weatherText = weather.city.substr(0, 10) + '\n' + weather.temp + 
-                        'c - ' + weather.condition;
+    var weatherText = weather.city.substr(0, 10) + '\n' 
+    + weather.temp + 'C - ' + weather.temp_min + '/'  + weather.temp_max ;
     ctx.font = '18px bold Gothic';
     ctx.textAlign = 'center';
-    ctx.fillText(weatherText, w / 2, 23 - obstruction_h);
+    ctx.fillText(weatherText, w / 2, 12 - obstruction_h);
   }
 
 });
 
 rocky.on('message', function(event) {
   weather = event.data;
-});
-
-rocky.on('secondchange', function(e) {
+  console.log(JSON.stringify(weather));
+  loading = false;
   rocky.requestDraw();
 });
 
-rocky.on('hourchange', function(e) {
-  rocky.postMessage({command: 'weather'});
+rocky.on('minutechange', function(e) {
+  var d = new Date();
+  if (weather == null || (d.getMinutes() % 15 == 0) ) {
+    loadWeather();
+  } else {
+    rocky.requestDraw();
+  }
 });
+
+rocky.on('hourchange', function(e) {
+//  loadWeather();
+});
+
+function loadWeather() {
+  if (loading) return;
+  console.log('Weather...');
+  loading = true;
+  rocky.requestDraw();
+  rocky.postMessage({command: 'weather'});
+}
 
 function leftpad(str, len, ch) {
   str = String(str);
